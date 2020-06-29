@@ -1,12 +1,5 @@
-#  Mastodon Glitch Edition  #
+#  Holly's Glitchsoc-Based Fork  #
 
->   Now with automated deploys!
+This is a fork of a fork of a federated social platform server app. This will be implementing some of the features from [Monsterfork](https://monsterware.dev/monsterpit/mastodon) as well as trying to stick up to date with upstream as much as possible. (Maybe I'll try to actually do one of those really nifty CI/CD workflows... or at least automate *something*.)
 
-[![Build Status](https://img.shields.io/circleci/project/github/glitch-soc/mastodon.svg)][circleci]
-
-[circleci]: https://circleci.com/gh/glitch-soc/mastodon
-
-So here's the deal: we all work on this code, and then it runs on dev.glitch.social and anyone who uses that does so absolutely at their own risk. can you dig it?
-
-- You can view documentation for this project at [glitch-soc.github.io/docs/](https://glitch-soc.github.io/docs/).
-- And contributing guidelines are available [here](CONTRIBUTING.md) and [here](https://glitch-soc.github.io/docs/contributing/).
+There's admittedly probably not going to be a ton interesting going on here, but as Mastodon (you know, the server software) is licensed under the AGPL, it's necessary for me to make public any changes I perform to the code.
