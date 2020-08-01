@@ -15,6 +15,8 @@ import { FormattedMessage } from 'react-intl';
 import { fetchAccountIdentityProofs } from '../../actions/identity_proofs';
 import MissingIndicator from 'mastodon/components/missing_indicator';
 import TimelineHint from 'mastodon/components/timeline_hint';
+import { me } from 'mastodon/initial_state';
+import { connectUserTimelineStream } from '../../actions/streaming';
 
 const emptyList = ImmutableList();
 
@@ -22,7 +24,7 @@ const mapStateToProps = (state, { params: { accountId }, withReplies = false }) 
   const path = withReplies ? `${accountId}:with_replies` : accountId;
 
   return {
-    remote: !!state.getIn(['accounts', accountId, 'acct']) !== state.getIn(['accounts', accountId, 'username']),
+    remote: !!(state.getIn(['accounts', accountId, 'acct']) !== state.getIn(['accounts', accountId, 'username'])),
     remoteUrl: state.getIn(['accounts', accountId, 'url']),
     isAccount: !!state.getIn(['accounts', accountId]),
     statusIds: state.getIn(['timelines', `account:${path}`, 'items'], emptyList),
@@ -73,6 +75,12 @@ class AccountTimeline extends ImmutablePureComponent {
     this.props.dispatch(expandAccountTimeline(accountId, { withReplies }));
   }
 
+  componentDidMount () {
+    if (this.props.params.accountId === me) {
+      this.disconnect = this.props.dispatch(connectUserTimelineStream(me));
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
     if ((nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) || nextProps.withReplies !== this.props.withReplies) {
       this.props.dispatch(fetchAccount(nextProps.params.accountId));
@@ -83,6 +91,13 @@ class AccountTimeline extends ImmutablePureComponent {
       }
 
       this.props.dispatch(expandAccountTimeline(nextProps.params.accountId, { withReplies: nextProps.params.withReplies }));
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.disconnect) {
+      this.disconnect();
+      this.disconnect = null;
     }
   }
 
